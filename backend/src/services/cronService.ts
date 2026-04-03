@@ -1,5 +1,5 @@
 import cron from 'node-cron';
-import prisma from '../config/db';
+import prisma from '../config/db.json';
 import { syncUserData } from './scraperService';
 import { generateDailyTask } from './taskService';
 
