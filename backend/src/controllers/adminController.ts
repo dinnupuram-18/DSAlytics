@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import prisma from '../config/db';
+import prisma from '../config/db.js';
 
 export const addBatch = async (req: any, res: Response): Promise<void> => {
     try {
