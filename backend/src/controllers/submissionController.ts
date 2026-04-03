@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import prisma from '../config/db';
+import prisma from '../config/db.js';
 
 const DIFFICULTY_POINTS: Record<string, number> = {
     Easy: 5,
