@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import prisma from '../config/db';
+import prisma from '../config/db.js';
 
 // GET /api/friends/status/:targetId
 // Returns: { status: 'none' | 'pending' | 'accepted', isSender?: boolean, requestId?: string }
