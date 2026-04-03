@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import prisma from '../config/db';
+import prisma from '../config/db.js';
 
 export const sendChallenge = async (req: Request, res: Response): Promise<void> => {
     try {
