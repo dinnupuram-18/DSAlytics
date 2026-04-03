@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { checkTaskEligibility, generateDailyTask, completeDailyTask, checkAutoCompletion } from '../services/taskService';
-import prisma from '../config/db';
+import prisma from '../config/db.js';
 
 export const getDailyTask = async (req: Request, res: Response) => {
     try {
