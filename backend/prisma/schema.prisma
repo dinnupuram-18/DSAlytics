@@ -1,0 +1,210 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id               String                 @id @default(uuid())
+  name             String
+  email            String                 @unique
+  collegeId        String                 @unique
+  batch            String
+  department       String
+  dob              DateTime?
+  aboutMe          String?
+  branch           String?
+  year             String?
+  section          String?
+  placementTarget  String?
+  passwordHash     String
+  totalPoints      Int                    @default(0)
+  dailyStreak      Int                    @default(0)
+  longestStreak    Int                    @default(0)
+  lastStreakDate   DateTime?
+  isAdmin          Boolean                @default(false)
+  createdAt        DateTime               @default(now())
+  leetcodeUrl      String?
+  codechefUrl      String?
+  codeforcesUrl    String?
+  gfgUrl           String?
+  hackerrankUrl    String?
+  leetcodePoints   Int                    @default(0)
+  codechefPoints   Int                    @default(0)
+  codeforcesPoints Int                    @default(0)
+  gfgPoints        Int                    @default(0)
+  hackerrankPoints Int                    @default(0)
+  githubPoints     Int                    @default(0)
+  topicStats       Json?
+  avatarUrl        String?
+  changeRequests   ProfileChangeRequest[]
+  submissions      Submission[]
+  stats            Stats?
+  pointSnapshots   PointSnapshot[]
+  battlePoints     Int                    @default(0)
+  battleStreak     Int                    @default(0)
+  battleRank       String                 @default("Bronze")
+  isOnline         Boolean                @default(false)
+  sentRequests     FriendRequest[]        @relation("SentRequests")
+  receivedRequests FriendRequest[]        @relation("ReceivedRequests")
+  battlesAsChallenger Battle[]   @relation("BattleChallenger")
+  battlesAsOpponent   Battle[]   @relation("BattleOpponent")
+  notifications       Notification[]
+  dailyTasks          DailyTask[]
+  sentChallenges     Challenge[]          @relation("SentChallenges")
+  receivedChallenges Challenge[]          @relation("ReceivedChallenges")
+
+  @@index([totalPoints(sort: Desc)])
+}
+
+model Stats {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  totalSolved      Int      @default(0)
+  easySolved       Int      @default(0)
+  mediumSolved     Int      @default(0)
+  hardSolved       Int      @default(0)
+  lastUpdated      DateTime @default(now())
+  recentSubmission Json?
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ProfileChangeRequest {
+  id          String   @id @default(uuid())
+  userId      String
+  platform    String
+  newUrl      String
+  status      String   @default("PENDING")
+  requestedAt DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model Submission {
+  id            String   @id @default(uuid())
+  userId        String
+  platform      String
+  problemName   String
+  difficulty    String
+  topic         String
+  dateSolved    DateTime @default(now())
+  pointsAwarded Int
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Competition {
+  id        String   @id @default(uuid())
+  title     String
+  startDate DateTime
+  endDate   DateTime
+  isActive  Boolean  @default(true)
+}
+
+model Batch {
+  id          String @id @default(uuid())
+  year        String @unique
+  batchPoints Int    @default(0)
+}
+
+model PointSnapshot {
+  id          String   @id @default(uuid())
+  userId      String
+  totalPoints Int
+  type        String // "DAILY", "WEEKLY", "MONTHLY"
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type])
+}
+
+model FriendRequest {
+  id         String   @id @default(uuid())
+  senderId   String
+  receiverId String
+  status     String   @default("pending") // pending | accepted | rejected
+  createdAt  DateTime @default(now())
+  sender     User     @relation("SentRequests", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User     @relation("ReceivedRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+  @@index([receiverId, status])
+}
+
+model Battle {
+  id               String    @id @default(uuid())
+  challengerId     String
+  opponentId       String
+  questionTitle    String
+  questionUrl      String
+  topic            String    @default("general")
+  difficulty       String    @default("Medium")
+  platform         String    @default("leetcode")
+  status           String    @default("pending") // pending | active | finished | expired
+  winnerId         String?
+  challengerDone   Boolean   @default(false)
+  opponentDone     Boolean   @default(false)
+  challengerDoneAt DateTime?
+  opponentDoneAt   DateTime?
+  challengerScore  Float?
+  opponentScore    Float?
+  challengerRuntime Float?
+  challengerMemory  Float?
+  opponentRuntime   Float?
+  opponentMemory    Float?
+  firstSubmittedById String?
+  expiresAt        DateTime
+  createdAt        DateTime  @default(now())
+  challenger       User      @relation("BattleChallenger", fields: [challengerId], references: [id], onDelete: Cascade)
+  opponent         User      @relation("BattleOpponent",   fields: [opponentId],   references: [id], onDelete: Cascade)
+
+  @@index([challengerId])
+  @@index([opponentId])
+  @@index([status])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  message   String
+  type      String // friend_request | challenge_received | challenge_accepted
+  refId     String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+}
+
+model DailyTask {
+  id            String   @id @default(uuid())
+  userId        String
+  questionTitle String
+  questionUrl   String
+  topic         String
+  difficulty    String
+  taskDate      DateTime @default(now())
+  completed     Boolean  @default(false)
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, taskDate])
+}
+
+model Challenge {
+  id          String   @id @default(uuid())
+  senderId    String
+  receiverId  String
+  problemName String
+  problemURL  String
+  difficulty  String
+  status      String   @default("PENDING") // PENDING, COMPLETED
+  createdAt   DateTime @default(now())
+  
+  sender      User     @relation("SentChallenges", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver    User     @relation("ReceivedChallenges", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([receiverId, status])
+  @@index([senderId])
+}
