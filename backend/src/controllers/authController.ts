@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import prisma from '../config/db';
+import prisma from '../config/db.js';
 import fs from 'fs';
 import path from 'path';
 import { getCache, setCache, clearCache } from '../services/cacheService';
