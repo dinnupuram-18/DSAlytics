@@ -1,4 +1,4 @@
-import prisma from '../config/db';
+import prisma from '../config/db.js';
 import { TOPIC_MAPPING } from './analyticsService';
 
 /**
