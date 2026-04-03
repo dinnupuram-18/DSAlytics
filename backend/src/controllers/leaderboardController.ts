@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import prisma from '../config/db';
+import prisma from '../config/db.js';
 import { getCache, setCache, clearCacheByPrefix } from '../services/cacheService';
 
 const LEADERBOARD_TTL = 120; // Cache leaderboard for 2 minutes
