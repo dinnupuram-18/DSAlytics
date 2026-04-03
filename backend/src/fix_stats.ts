@@ -1,4 +1,4 @@
-import prisma from './src/config/db';
+import prisma from './config/db';
 
 async function main() {
     const user = await prisma.user.findFirst({
