@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import prisma from '../config/db';
+import prisma from '../config/db.js';
 import { TOPIC_MAPPING } from './analyticsService';
 
 const DIFFICULTY_POINTS = {
