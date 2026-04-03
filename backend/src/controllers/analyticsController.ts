@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import prisma from '../config/db';
+import prisma from '../config/db.js';
 import { analyzeUserReadiness } from '../services/analyticsService';
 
 const CORE_TOPICS = ['Arrays', 'Strings', 'Linked Lists', 'Trees', 'Graphs', 'DP', 'Greedy', 'Backtracking', 'Sorting', 'Searching'];
