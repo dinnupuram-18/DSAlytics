@@ -43,6 +43,15 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
+// Validate required environment variables early and provide a clear error if missing
+const requiredEnvs = ['DATABASE_URL', 'JWT_SECRET'];
+const missingEnvs = requiredEnvs.filter((k) => !process.env[k]);
+if (missingEnvs.length > 0) {
+    console.error('Missing required environment variables:', missingEnvs.join(', '));
+    // Exit with non-zero code so the deployment service shows the failure and logs
+    process.exit(1);
+}
+
 app.listen(PORT as number, '0.0.0.0', () => {
     console.log(`Server is running on port ${PORT}`);
     initCronJobs();
