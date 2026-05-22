@@ -86,7 +86,7 @@ export const getOverallLeaderboard = async (req: Request, res: Response): Promis
         }
 
         // Sort dynamically by the calculated displayPoints
-        leaderboard.sort((a, b) => b.displayPoints - a.displayPoints);
+        leaderboard.sort((a: any, b: any) => (b.displayPoints ?? 0) - (a.displayPoints ?? 0));
 
         const result = leaderboard.slice(0, 100);
         setCache(cacheKey, result, LEADERBOARD_TTL);
