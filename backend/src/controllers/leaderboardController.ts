@@ -78,9 +78,9 @@ export const getOverallLeaderboard = async (req: Request, res: Response): Promis
             const snapshotMap = new Map(snapshots.map((s: any) => [s.userId, s.totalPoints]));
 
             leaderboard = leaderboard.map((u: any) => {
-                const pastPoints = snapshotMap.get(u.id) || 0;
+                const pastPoints = Number(snapshotMap.get(u.id) ?? 0);
                 // Display points gained during this timeframe (current - past)
-                const gained = Math.max(0, (u.totalPoints ?? 0) - pastPoints);
+                const gained = Math.max(0, Number(u.totalPoints ?? 0) - pastPoints);
                 return { ...u, displayPoints: gained };
             });
         }
