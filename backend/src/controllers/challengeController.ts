@@ -96,7 +96,8 @@ export const getSentChallenges = async (req: Request, res: Response): Promise<vo
 export const completeChallenge = async (req: Request, res: Response): Promise<void> => {
     try {
         const userId = (req as any).user.id;
-        const { id } = req.params;
+        const idParam = req.params.id;
+        const id = Array.isArray(idParam) ? idParam[0] : idParam;
 
         const challenge = await prisma.challenge.findUnique({ where: { id } });
 

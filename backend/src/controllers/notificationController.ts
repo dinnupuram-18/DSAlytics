@@ -28,7 +28,7 @@ export const broadcastNotification = async (req: any, res: Response): Promise<vo
         const users = await prisma.user.findMany({ select: { id: true } });
 
         await prisma.notification.createMany({
-            data: users.map(u => ({
+            data: users.map((u: any) => ({
                 userId: u.id,
                 message,
                 type,

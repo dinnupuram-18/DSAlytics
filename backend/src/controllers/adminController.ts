@@ -263,9 +263,9 @@ export const getSystemAnalytics = async (req: any, res: Response): Promise<void>
         });
 
         res.status(200).json({
-            platformDistribution: submissionsByPlatform.map(p => ({ name: p.platform, value: p._count._all })),
-            activity: dailyActivity.map(d => ({ date: d.dateSolved.toLocaleDateString(), count: d._count._all })),
-            userClusters: usersByBatch.map(b => ({ name: b.batch, count: b._count._all }))
+            platformDistribution: submissionsByPlatform.map((p: any) => ({ name: p.platform, value: p._count._all })),
+            activity: dailyActivity.map((d: any) => ({ date: d.dateSolved.toLocaleDateString(), count: d._count._all })),
+            userClusters: usersByBatch.map((b: any) => ({ name: b.batch, count: b._count._all }))
         });
     } catch (error) {
         console.error('Analytics Error:', error);

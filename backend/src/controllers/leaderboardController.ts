@@ -61,7 +61,7 @@ export const getOverallLeaderboard = async (req: Request, res: Response): Promis
             },
         });
 
-        let leaderboard = users.map(u => ({
+        let leaderboard = users.map((u: any) => ({
             ...u,
             totalSolved: u.stats?.totalSolved || 0,
             displayPoints: u.leetcodePoints // Display only LeetCode points as requested
@@ -71,16 +71,16 @@ export const getOverallLeaderboard = async (req: Request, res: Response): Promis
         if (timeframe === 'weekly' || timeframe === 'monthly') {
             const typeValue = timeframe === 'weekly' ? 'WEEKLY' : 'MONTHLY';
             const snapshots = await prisma.pointSnapshot.findMany({
-                where: { type: typeValue, userId: { in: users.map(u => u.id) } }
+                where: { type: typeValue, userId: { in: users.map((u: any) => u.id) } }
             });
 
             // Map userId to their past totalPoints
-            const snapshotMap = new Map(snapshots.map(s => [s.userId, s.totalPoints]));
+            const snapshotMap = new Map(snapshots.map((s: any) => [s.userId, s.totalPoints]));
 
-            leaderboard = leaderboard.map(u => {
+            leaderboard = leaderboard.map((u: any) => {
                 const pastPoints = snapshotMap.get(u.id) || 0;
                 // Display points gained during this timeframe (current - past)
-                const gained = Math.max(0, u.totalPoints - pastPoints);
+                const gained = Math.max(0, (u.totalPoints ?? 0) - pastPoints);
                 return { ...u, displayPoints: gained };
             });
         }
