@@ -1,6 +1,8 @@
-FROM node:24-alpine
+FROM node:24-bullseye-slim
 
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y libssl1.1 && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
 RUN npm ci
