@@ -484,10 +484,19 @@ async function fetchPlatformStats(username: string, platform: string) {
                     timeout: 10000
                 });
                 const html = response.data;
-                const $gfg = cheerio.load(html);
-                const totalStr = $gfg('.score_cards_container .score_card').first().find('.score_card_value').text();
+                let totalProblems = 0;
+                
+                // Try finding total problems in the embedded JSON payload first
+                const match = html.match(/"total_problems_solved"\s*:\s*(\d+)/);
+                if (match) {
+                    totalProblems = parseInt(match[1]) || 0;
+                } else {
+                    // Fallback to old cheerio logic
+                    const $gfg = cheerio.load(html);
+                    const totalStr = $gfg('.score_cards_container .score_card').first().find('.score_card_value').text();
+                    totalProblems = parseInt(totalStr) || 0;
+                }
 
-                const totalProblems = parseInt(totalStr) || 0;
                 if (totalProblems > 0) {
                     const stats = {
                         easy: Math.floor(totalProblems * 0.5),
