@@ -509,7 +509,7 @@ async function fetchPlatformStats(username: string, platform: string) {
                     console.log(`[Scraper] GFG Success for ${username}:`, stats);
                     return stats;
                 } else {
-                    console.warn(`[Scraper] GFG solved count not found or 0 for ${username}. Text found: ${totalStr}`);
+                    console.warn(`[Scraper] GFG solved count not found or 0 for ${username}.`);
                 }
             } catch (e: any) {
                 console.error('[Scraper] GFG Scrape Error:', e.message);
