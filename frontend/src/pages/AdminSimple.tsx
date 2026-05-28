@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DashboardLayout } from '../components/DashboardLayout';
+import { DashboardLayout, getFullAvatarUrl } from '../components/DashboardLayout';
 import { API_BASE_URL } from '../config';
 import { Users, Clock, Download, Search, Trash2, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -201,7 +201,7 @@ export default function Admin() {
                                 <div className="flex items-start justify-between mb-4">
                                     <div className="w-16 h-16 rounded-2xl overflow-hidden bg-surface border-2 border-indigo-500/30">
                                         <img 
-                                            src={user.avatarUrl ? `${API_BASE_URL}${user.avatarUrl}` : `https://ui-avatars.com/api/?name=${user.name}&background=6366f1&color=fff&size=128`}
+                                            src={user.avatarUrl ? (getFullAvatarUrl(user.avatarUrl) || '') : `https://ui-avatars.com/api/?name=${user.name}&background=6366f1&color=fff&size=128`}
                                             alt={user.name}
                                             className="w-full h-full object-cover"
                                         />

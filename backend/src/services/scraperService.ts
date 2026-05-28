@@ -30,17 +30,20 @@ export const extractUsername = (url: string, platform: string): string | null =>
                 if (pathParts.includes('profile')) return pathParts[pathParts.indexOf('profile') + 1] || null;
                 return pathParts[0] || null;
             case 'gfg':
-                // Handles https://www.geeksforgeeks.org/user/username/
+                // Handles https://www.geeksforgeeks.org/user/username/ and /profile/username/
                 if (pathParts.includes('user')) return pathParts[pathParts.indexOf('user') + 1] || null;
+                if (pathParts.includes('profile')) return pathParts[pathParts.indexOf('profile') + 1] || null;
                 return pathParts[0] || null;
             case 'hackerrank':
                 // Handles https://www.hackerrank.com/profile/username
                 if (pathParts.includes('profile')) return pathParts[pathParts.indexOf('profile') + 1] || null;
                 return pathParts[0] || null;
             default:
+                console.log(`[extractUsername] Unknown platform: ${platform}`);
                 return null;
         }
-    } catch (e) {
+    } catch (e: any) {
+        console.error(`[extractUsername] Error parsing URL '${url}':`, e.message);
         return null;
     }
 };
@@ -289,11 +292,12 @@ async function fetchPlatformStats(username: string, platform: string) {
     try {
         if (platform === 'hackerrank') {
             try {
+                console.log(`[Scraper] Fetching HackerRank for ${username}`);
                 const response = await axios.get(`https://www.hackerrank.com/rest/hackers/${username}/badges`, {
                     headers: {
                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
                     },
-                    timeout: 4000
+                    timeout: 10000
                 });
 
                 const stats = {
@@ -310,11 +314,14 @@ async function fetchPlatformStats(username: string, platform: string) {
                         stats.totalPoints += (badge.current_points || 0);
                         stats.totalSolved += (badge.solved || 0);
                     });
+                } else {
+                    console.warn(`[Scraper] HackerRank no models found for ${username}`);
                 }
 
+                console.log(`[Scraper] HackerRank Success for ${username}:`, stats);
                 return stats;
-            } catch (e) {
-                console.error('HackerRank Fetch Error:', e);
+            } catch (e: any) {
+                console.error('[Scraper] HackerRank Fetch Error:', e.message);
             }
         }
 
@@ -388,11 +395,12 @@ async function fetchPlatformStats(username: string, platform: string) {
 
         if (platform === 'codeforces') {
             try {
+                console.log(`[Scraper] Fetching CodeForces for ${username}`);
                 const response = await axios.get(`https://codeforces.com/api/user.status?handle=${username}`, {
                     headers: {
                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
                     },
-                    timeout: 4000
+                    timeout: 10000
                 });
                 if (response.data.status === 'OK') {
                     const submissions = response.data.result;
@@ -407,9 +415,7 @@ async function fetchPlatformStats(username: string, platform: string) {
                         }
                     });
 
-                    // Simple difficulty mapping for CF
-                    // In real app, we'd fetch problem details to get rating-based difficulty
-                    return {
+                    const stats = {
                         easy: solved.filter((s: any) => s.problem.rating && s.problem.rating <= 1200).length,
                         medium: solved.filter((s: any) => s.problem.rating && s.problem.rating > 1200 && s.problem.rating <= 1900).length,
                         hard: solved.filter((s: any) => s.problem.rating && s.problem.rating > 1900).length,
@@ -417,19 +423,24 @@ async function fetchPlatformStats(username: string, platform: string) {
                         topics: topics,
                         totalPoints: 0
                     };
+                    console.log(`[Scraper] CodeForces Success for ${username}:`, stats);
+                    return stats;
+                } else {
+                    console.warn(`[Scraper] CodeForces API returned status ${response.data.status} for ${username}`);
                 }
-            } catch (e) {
-                console.error('CodeForces Fetch Error:', e);
+            } catch (e: any) {
+                console.error('[Scraper] CodeForces Fetch Error:', e.message);
             }
         }
 
         if (platform === 'codechef') {
             try {
+                console.log(`[Scraper] Fetching CodeChef for ${username}`);
                 const response = await axios.get(`https://www.codechef.com/users/${username}`, {
                     headers: {
                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
                     },
-                    timeout: 4000
+                    timeout: 10000
                 });
                 const $ = cheerio.load(response.data);
 
@@ -447,6 +458,8 @@ async function fetchPlatformStats(username: string, platform: string) {
                 const countMatch = solvedCountText.match(/Total Problems Solved:\s*(\d+)/);
                 if (countMatch && countMatch[1]) {
                     stats.totalSolved = parseInt(countMatch[1]);
+                } else {
+                    console.warn(`[Scraper] CodeChef solved count not found for ${username}. HTML length: ${response.data.length}`);
                 }
 
                 // Mocking difficulty split for CodeChef as it's not exposed cleanly in HTML
@@ -454,19 +467,21 @@ async function fetchPlatformStats(username: string, platform: string) {
                 stats.medium = Math.floor(stats.totalSolved * 0.3);
                 stats.hard = stats.totalSolved - stats.easy - stats.medium;
 
+                console.log(`[Scraper] CodeChef Success for ${username}:`, stats);
                 return stats;
-            } catch (e) {
-                console.error('CodeChef Scrape Error:', e);
+            } catch (e: any) {
+                console.error('[Scraper] CodeChef Scrape Error:', e.message);
             }
         }
 
         if (platform === 'gfg') {
             try {
-                const response = await axios.get(`https://auth.geeksforgeeks.org/user/${username}/practice/`, {
+                console.log(`[Scraper] Fetching GFG for ${username}`);
+                const response = await axios.get(`https://www.geeksforgeeks.org/user/${username}/`, {
                     headers: {
                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
                     },
-                    timeout: 4000
+                    timeout: 10000
                 });
                 const html = response.data;
                 const $gfg = cheerio.load(html);
@@ -482,16 +497,20 @@ async function fetchPlatformStats(username: string, platform: string) {
                         topics: {} as Record<string, number>,
                         totalPoints: 0
                     };
+                    console.log(`[Scraper] GFG Success for ${username}:`, stats);
                     return stats;
+                } else {
+                    console.warn(`[Scraper] GFG solved count not found or 0 for ${username}. Text found: ${totalStr}`);
                 }
-            } catch (e) {
-                console.error('GFG Scrape Error:', e);
+            } catch (e: any) {
+                console.error('[Scraper] GFG Scrape Error:', e.message);
             }
         }
 
         return null;
-    } catch (e) {
-        console.error(`Error scraping ${platform}:`, e);
+        return null;
+    } catch (e: any) {
+        console.error(`[Scraper] FATAL Error scraping ${platform} for ${username}:`, e.message || e);
         return null;
     }
 }

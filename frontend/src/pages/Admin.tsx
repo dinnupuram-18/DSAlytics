@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { DashboardLayout } from '../components/DashboardLayout';
+import { DashboardLayout, getFullAvatarUrl } from '../components/DashboardLayout';
 import { API_BASE_URL } from '../config';
 import { PageHeader } from '../components/PageHeader';
 import { StatCard } from '../components/StatCard';
@@ -358,7 +358,7 @@ export default function Admin() {
                                             <div className="flex items-center gap-3 mb-3">
                                                 <div className="w-12 h-12 rounded-xl overflow-hidden bg-surface border-2 border-indigo-500/30 group-hover:border-indigo-500 transition-all">
                                                     <img 
-                                                        src={user.avatarUrl ? `${API_BASE_URL}${user.avatarUrl}` : `https://ui-avatars.com/api/?name=${user.name}&background=6366f1&color=fff`}
+                                                        src={user.avatarUrl ? (getFullAvatarUrl(user.avatarUrl) || '') : `https://ui-avatars.com/api/?name=${user.name}&background=6366f1&color=fff`}
                                                         alt={user.name}
                                                         className="w-full h-full object-cover"
                                                     />
@@ -398,7 +398,7 @@ export default function Admin() {
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-10 h-10 rounded-xl overflow-hidden bg-surface border border-border-color/30">
                                                         <img 
-                                                            src={req.user.avatarUrl ? `${API_BASE_URL}${req.user.avatarUrl}` : `https://ui-avatars.com/api/?name=${req.user.name}&background=random`}
+                                                            src={req.user.avatarUrl ? (getFullAvatarUrl(req.user.avatarUrl) || '') : `https://ui-avatars.com/api/?name=${req.user.name}&background=random`}
                                                             alt={req.user.name}
                                                             className="w-full h-full object-cover"
                                                         />
@@ -467,7 +467,7 @@ export default function Admin() {
                                             <div className="flex items-start justify-between mb-4">
                                                 <div className="w-16 h-16 rounded-2xl overflow-hidden bg-surface border-2 border-indigo-500/30 group-hover:border-indigo-500 transition-all">
                                                     <img 
-                                                        src={user.avatarUrl ? `${API_BASE_URL}${user.avatarUrl}` : `https://ui-avatars.com/api/?name=${user.name}&background=6366f1&color=fff&size=128`}
+                                                        src={user.avatarUrl ? (getFullAvatarUrl(user.avatarUrl) || '') : `https://ui-avatars.com/api/?name=${user.name}&background=6366f1&color=fff&size=128`}
                                                         alt={user.name}
                                                         className="w-full h-full object-cover"
                                                     />
@@ -545,7 +545,7 @@ export default function Admin() {
                                                 <div className="flex items-start gap-4 flex-1">
                                                     <div className="w-16 h-16 rounded-2xl overflow-hidden bg-surface border-2 border-amber-500/30">
                                                         <img 
-                                                            src={req.user.avatarUrl ? `${API_BASE_URL}${req.user.avatarUrl}` : `https://ui-avatars.com/api/?name=${req.user.name}&background=random&size=128`}
+                                                            src={req.user.avatarUrl ? (getFullAvatarUrl(req.user.avatarUrl) || '') : `https://ui-avatars.com/api/?name=${req.user.name}&background=random&size=128`}
                                                             alt={req.user.name}
                                                             className="w-full h-full object-cover"
                                                         />
@@ -677,7 +677,7 @@ export default function Admin() {
                                         <div className="flex items-start gap-6">
                                             <div className="w-24 h-24 rounded-2xl overflow-hidden border-4 border-indigo-500/30">
                                                 <img 
-                                                    src={userDetails.avatarUrl ? `${API_BASE_URL}${userDetails.avatarUrl}` : `https://ui-avatars.com/api/?name=${userDetails.name}&background=6366f1&color=fff&size=256`}
+                                                    src={userDetails.avatarUrl ? (getFullAvatarUrl(userDetails.avatarUrl) || '') : `https://ui-avatars.com/api/?name=${userDetails.name}&background=6366f1&color=fff&size=256`}
                                                     alt={userDetails.name}
                                                     className="w-full h-full object-cover"
                                                 />

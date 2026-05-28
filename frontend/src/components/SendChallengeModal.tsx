@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, UserCircle2, CheckCircle2 } from 'lucide-react';
 import { API_BASE_URL } from '../config';
+import { getFullAvatarUrl } from './DashboardLayout';
 
 export function SendChallengeModal({ isOpen, onClose, problem, onSuccess }: any) {
     const [friends, setFriends] = useState<any[]>([]);
@@ -111,7 +112,7 @@ export function SendChallengeModal({ isOpen, onClose, problem, onSuccess }: any)
                                         >
                                             <div className="w-10 h-10 rounded-full bg-main flex items-center justify-center border border-border-color shadow-sm overflow-hidden shrink-0">
                                                 {friendUser.avatarUrl ? (
-                                                    <img src={`${API_BASE_URL}${friendUser.avatarUrl}`} alt="Avatar" className="w-full h-full object-cover" />
+                                                    <img src={getFullAvatarUrl(friendUser.avatarUrl) || ''} alt="Avatar" className="w-full h-full object-cover" />
                                                 ) : (
                                                     <UserCircle2 size={24} className="text-secondary opacity-70" />
                                                 )}

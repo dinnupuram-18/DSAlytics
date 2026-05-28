@@ -4,6 +4,14 @@ import { BarChart3, Settings, LogOut, ShieldAlert, Menu, X, Award, UserCircle2, 
 import { motion, AnimatePresence } from 'framer-motion';
 import { API_BASE_URL } from '../config';
 
+export const getFullAvatarUrl = (url: string | null) => {
+    if (!url) return null;
+    if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://')) {
+        return url;
+    }
+    return `${API_BASE_URL}${url}`;
+};
+
 interface LayoutProps {
     children: ReactNode;
     isAdminView?: boolean;
@@ -271,7 +279,7 @@ export const DashboardLayout = ({ children, isAdminView }: LayoutProps) => {
                             <div className="flex items-center gap-4 px-6 pb-6 mt-2">
                                 <div className="rounded-full bg-main flex items-center justify-center border border-border-color overflow-hidden flex-shrink-0" style={{ width: '48px', height: '48px', minWidth: '48px' }}>
                                     {avatarUrl ? (
-                                        <img src={`${API_BASE_URL}${avatarUrl}`} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        <img src={getFullAvatarUrl(avatarUrl) || ''} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     ) : (
                                         <UserCircle2 size={24} className="text-secondary opacity-70" />
                                     )}
@@ -381,7 +389,7 @@ export const DashboardLayout = ({ children, isAdminView }: LayoutProps) => {
                 className={isMobile ? "main-content-mobile" : ""} 
                 style={{ 
                     marginLeft: isMobile ? '0' : '280px', 
-                    width: isInAdminView ? 'calc(100% - 280px)' : '100%',
+                    width: isMobile ? '100%' : 'calc(100% - 280px)',
                     maxWidth: isInAdminView ? 'none' : undefined,
                     padding: isInAdminView ? '2rem' : '2.5rem', 
                     paddingTop: isMobile ? '6rem' : '2.5rem', 

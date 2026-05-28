@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { DashboardLayout } from '../components/DashboardLayout';
+import { DashboardLayout, getFullAvatarUrl } from '../components/DashboardLayout';
 import { PageHeader } from '../components/PageHeader';
 import {
     Save, Camera, UserCircle2, Sun, Moon, CheckCircle2, AlertCircle,
@@ -303,7 +303,7 @@ export default function Settings() {
                                             <div style={{ fontSize: 22 }}>⏳</div>
                                         ) : (localPreview || profile?.avatarUrl) ? (
                                             <img
-                                                src={localPreview || `${API}${profile.avatarUrl}`}
+                                                src={localPreview || getFullAvatarUrl(profile.avatarUrl) || ''}
                                                 alt="avatar"
                                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                             />
@@ -388,7 +388,7 @@ export default function Settings() {
                         {/* ── Main Form Card ── */}
                         <motion.div variants={itemVariants} className="glass-card">
                             {/* Tabs */}
-                            <div style={{ display: 'flex', gap: '6px', marginBottom: '2rem', padding: '6px', background: 'var(--bg-elevated)', borderRadius: '14px', width: 'fit-content' }}>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '2rem', padding: '6px', background: 'var(--bg-elevated)', borderRadius: '14px', width: 'fit-content' }}>
                                 {tabs.map(tab => {
                                     const Icon = tab.icon;
                                     const isActive = activeTab === tab.id;

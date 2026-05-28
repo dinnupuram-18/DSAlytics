@@ -1242,3 +1242,44 @@ a:hover {
 .styled-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(99, 102, 241, 0.5);
 }
+
+/* --- RESPONSIVE WORK FOR PODIUMS & LEADERBOARD GRID (2026-05-28) --- */
+.leaderboard-row {
+  display: grid !important;
+  grid-template-columns: 45px 1fr 90px 85px !important;
+  gap: 0.5rem !important;
+  align-items: center !important;
+}
+
+@media (min-width: 640px) {
+  .leaderboard-row {
+    grid-template-columns: 60px 1fr 100px 100px 90px !important;
+    gap: 1rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .podium-container {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 1.5rem !important;
+  }
+  
+  .podium-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .podium-card.rank-1 {
+    order: 1 !important;
+    padding: 2.5rem 2rem !important;
+  }
+
+  .podium-card.rank-2 {
+    order: 2 !important;
+  }
+
+  .podium-card.rank-3 {
+    order: 3 !important;
+  }
+}

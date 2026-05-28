@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DashboardLayout } from '../components/DashboardLayout';
+import { DashboardLayout, getFullAvatarUrl } from '../components/DashboardLayout';
 import { API_BASE_URL } from '../config';
 import { StatCard } from '../components/StatCard';
 import { PageHeader } from '../components/PageHeader';
@@ -627,7 +627,7 @@ export default function Dashboard() {
                                 <button className="btn text-xs btn-primary py-2 px-4 rounded-xl" onClick={() => navigate('/analytics')}>View Topic Insights</button>
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
                                 <div className="flex-col gap-4">
                                     <div className="p-5 bg-elevated rounded-2xl border border-border-color">
                                         <div className="text-[10px] font-black text-muted uppercase tracking-[0.2em] mb-3">Priority Focus Topics</div>
@@ -890,7 +890,7 @@ export default function Dashboard() {
                                                 <div className="flex items-center gap-2">
                                                     <div style={{ width: '24px', height: '24px', minWidth: '24px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0, border: '1px solid rgba(255,255,255,0.1)' }}>
                                                         {challenge.sender.avatarUrl ? (
-                                                            <img src={`${API_BASE_URL}${challenge.sender.avatarUrl}`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                            <img src={getFullAvatarUrl(challenge.sender.avatarUrl) || ''} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                                         ) : (
                                                             <UserCircle2 size={24} className="text-secondary opacity-70" />
                                                         )}
@@ -1056,7 +1056,7 @@ export default function Dashboard() {
                                             {/* Avatar */}
                                             <div className="w-10 h-10 rounded-full bg-main flex items-center justify-center border border-border-color shadow-sm overflow-hidden">
                                                 {coder.avatarUrl ? (
-                                                    <img src={`${API_BASE_URL}${coder.avatarUrl}`} alt="Avatar" className="w-full h-full object-cover" />
+                                                    <img src={getFullAvatarUrl(coder.avatarUrl) || ''} alt="Avatar" className="w-full h-full object-cover" />
                                                 ) : (
                                                     <UserCircle2 size={24} className="text-secondary opacity-70" />
                                                 )}

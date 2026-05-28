@@ -173,7 +173,7 @@ export const getFriendList = async (req: Request, res: Response) => {
                     select: {
                         id: true, name: true, collegeId: true, batch: true, avatarUrl: true,
                         totalPoints: true, leetcodePoints: true, codechefPoints: true,
-                        codeforcesPoints: true, gfgPoints: true,
+                        codeforcesPoints: true, gfgPoints: true, hackerrankPoints: true,
                         stats: { select: { totalSolved: true } },
                     },
                 },
@@ -181,7 +181,7 @@ export const getFriendList = async (req: Request, res: Response) => {
                     select: {
                         id: true, name: true, collegeId: true, batch: true, avatarUrl: true,
                         totalPoints: true, leetcodePoints: true, codechefPoints: true,
-                        codeforcesPoints: true, gfgPoints: true,
+                        codeforcesPoints: true, gfgPoints: true, hackerrankPoints: true,
                         stats: { select: { totalSolved: true } },
                     },
                 },

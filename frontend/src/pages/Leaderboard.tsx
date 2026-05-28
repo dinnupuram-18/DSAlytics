@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { DashboardLayout } from '../components/DashboardLayout';
+import { DashboardLayout, getFullAvatarUrl } from '../components/DashboardLayout';
 import { PageHeader } from '../components/PageHeader';
 import { Search, Filter, UserCircle2, UserPlus } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -293,7 +293,7 @@ export default function Leaderboard() {
                                         <div className="avatar-wrapper">
                                             <div className="avatar-large flex items-center justify-center bg-elevated shadow-inner overflow-hidden">
                                                 {student.avatarUrl ? (
-                                                    <img src={`${API}${student.avatarUrl}`} alt="Avatar" className="w-full h-full object-cover" />
+                                                    <img src={getFullAvatarUrl(student.avatarUrl) || ''} alt="Avatar" className="w-full h-full object-cover" />
                                                 ) : (
                                                     <UserCircle2 size={64} className="text-muted/50" />
                                                 )}
@@ -330,7 +330,7 @@ export default function Leaderboard() {
                         {/* Others List */}
                         <motion.div variants={containerVariants} initial="hidden" animate="visible" className="ranking-list-container mt-8">
                             {/* Table Header */}
-                            <div className="px-6 text-[11px] font-black text-muted uppercase tracking-[0.25em] mb-4 pb-3" style={{ display: 'grid', gridTemplateColumns: 'minmax(60px, 80px) 1fr minmax(80px, 120px) minmax(80px, 120px) minmax(80px, 100px)', gap: '1rem', alignItems: 'center', borderBottom: '1px solid var(--border-color)' }}>
+                            <div className="leaderboard-row px-6 text-[11px] font-black text-muted uppercase tracking-[0.25em] mb-4 pb-3" style={{ borderBottom: '1px solid var(--border-color)' }}>
                                 <div className="text-center">Rank</div>
                                 <div>Student</div>
                                 <div className="text-center hidden sm:block">Solved</div>
@@ -345,8 +345,8 @@ export default function Leaderboard() {
                                     variants={itemVariants}
                                     whileHover={{ scale: 1.01, backgroundColor: 'rgba(255,255,255,0.03)', boxShadow: '0 8px 30px rgba(0,0,0,0.1)' }}
                                     key={student.id}
-                                    className="glass-card px-6 py-4 mb-3 transition-all duration-300"
-                                    style={{ display: 'grid', gridTemplateColumns: 'minmax(60px, 80px) 1fr minmax(80px, 120px) minmax(80px, 120px) minmax(80px, 100px)', gap: '1rem', alignItems: 'center', borderRadius: '16px', border: '1px solid var(--border-color)' }}
+                                    className="leaderboard-row glass-card px-6 py-4 mb-3 transition-all duration-300"
+                                    style={{ borderRadius: '16px', border: '1px solid var(--border-color)' }}
                                 >
                                     {/* Rank */}
                                     <div className="text-center font-black text-2xl italic" style={{ color: 'var(--text-muted)' }}>
@@ -357,7 +357,7 @@ export default function Leaderboard() {
                                     <div className="flex items-center gap-4 min-w-0">
                                         <div className="rounded-full bg-main border border-border-color overflow-hidden flex-shrink-0" style={{ width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                             {student.avatarUrl ? (
-                                                <img src={`${API}${student.avatarUrl}`} alt="Avatar" style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '50%', display: 'block' }} />
+                                                <img src={getFullAvatarUrl(student.avatarUrl) || ''} alt="Avatar" style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '50%', display: 'block' }} />
                                             ) : (
                                                 <UserCircle2 size={24} className="text-secondary opacity-70" />
                                             )}

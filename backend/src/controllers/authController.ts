@@ -185,6 +185,8 @@ export const getProfile = async (req: any, res: Response): Promise<void> => {
                 // @ts-ignore
                 gfgPoints: true,
                 // @ts-ignore
+                hackerrankPoints: true,
+                // @ts-ignore
                 githubPoints: true,
                 totalPoints: true,
                 dailyStreak: true,
@@ -218,6 +220,7 @@ export const getProfile = async (req: any, res: Response): Promise<void> => {
 
         // Cache for PROFILE_TTL seconds
         setCache(cacheKey, user, PROFILE_TTL);
+        console.log(`[DEBUG] getProfile for user ${user.name}: hackerrankPoints = ${user.hackerrankPoints}`);
         res.status(200).json(user);
     } catch (error) {
         console.error('Profile Fetch Error:', error);
@@ -234,11 +237,13 @@ export const uploadAvatar = async (req: any, res: Response): Promise<void> => {
             return;
         }
 
-        const avatarUrl = `/uploads/avatars/${req.file.filename}`;
+        // Convert the file buffer to Base64 format
+        const base64Image = req.file.buffer.toString('base64');
+        const avatarUrl = `data:${req.file.mimetype};base64,${base64Image}`;
 
         const user = await prisma.user.findUnique({ where: { id: userId } });
         // @ts-ignore
-        if (user && user.avatarUrl) {
+        if (user && user.avatarUrl && !user.avatarUrl.startsWith('data:')) {
             // @ts-ignore
             const oldPath = path.join(__dirname, '../../', user.avatarUrl);
             if (fs.existsSync(oldPath)) {

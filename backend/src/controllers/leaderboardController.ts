@@ -64,7 +64,7 @@ export const getOverallLeaderboard = async (req: Request, res: Response): Promis
         let leaderboard = users.map((u: any) => ({
             ...u,
             totalSolved: u.stats?.totalSolved || 0,
-            displayPoints: u.leetcodePoints // Display only LeetCode points as requested
+            displayPoints: u.totalPoints
         }));
 
         // Handle Timeframe (Weekly/Monthly) filtering logic
@@ -115,6 +115,7 @@ export const getBatchLeaderboard = async (req: Request, res: Response): Promise<
                 codechefPoints: true,
                 codeforcesPoints: true,
                 gfgPoints: true,
+                hackerrankPoints: true,
                 dailyStreak: true,
                 avatarUrl: true,
             },
