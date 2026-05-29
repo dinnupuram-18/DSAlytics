@@ -112,6 +112,13 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
             { expiresIn: '1d' }
         );
 
+        // Mark user as online
+        await prisma.user.update({
+            where: { id: user.id },
+            // @ts-ignore
+            data: { isOnline: true, lastSeen: new Date() }
+        });
+
         res.status(200).json({
             message: 'Logged in successfully',
             token,
@@ -364,5 +371,37 @@ export const updateProfile = async (req: any, res: Response): Promise<void> => {
     } catch (error) {
         console.error('Profile Update Error:', error);
         res.status(500).json({ error: 'Internal server error while updating profile' });
+    }
+};
+
+// Heartbeat — keeps user online and updates lastSeen
+export const heartbeat = async (req: any, res: Response): Promise<void> => {
+    try {
+        const userId = req.user.id;
+        await prisma.user.update({
+            where: { id: userId },
+            // @ts-ignore
+            data: { isOnline: true, lastSeen: new Date() }
+        });
+        res.status(200).json({ ok: true });
+    } catch (error) {
+        console.error('Heartbeat Error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+// Logout — marks user as offline
+export const logoutUser = async (req: any, res: Response): Promise<void> => {
+    try {
+        const userId = req.user.id;
+        await prisma.user.update({
+            where: { id: userId },
+            // @ts-ignore
+            data: { isOnline: false, lastSeen: new Date() }
+        });
+        res.status(200).json({ message: 'Logged out successfully' });
+    } catch (error) {
+        console.error('Logout Error:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 };

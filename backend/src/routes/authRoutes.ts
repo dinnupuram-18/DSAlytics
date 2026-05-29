@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { registerUser, loginUser, getProfile, uploadAvatar, deleteAvatar, updateProfile } from '../controllers/authController';
+import { registerUser, loginUser, getProfile, uploadAvatar, deleteAvatar, updateProfile, heartbeat, logoutUser } from '../controllers/authController';
 import { requestProfileChange, getMyRequests } from '../controllers/userController';
 import { authenticateToken } from '../middlewares/authMiddleware';
 import multer from 'multer';

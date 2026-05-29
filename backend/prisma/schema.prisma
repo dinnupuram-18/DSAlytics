@@ -54,6 +54,7 @@ model User {
   battleStreak     Int                    @default(0)
   battleRank       String                 @default("Bronze")
   isOnline         Boolean                @default(false)
+  lastSeen         DateTime?
   sentRequests     FriendRequest[]        @relation("SentRequests")
   receivedRequests FriendRequest[]        @relation("ReceivedRequests")
   battlesAsChallenger Battle[]   @relation("BattleChallenger")

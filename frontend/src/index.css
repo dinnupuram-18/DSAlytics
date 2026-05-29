@@ -278,7 +278,7 @@ a:hover {
   font-size: 1.1rem;
   transition: var(--transition-smooth);
   position: relative;
-  overflow: hidden;
+  white-space: nowrap;
 }
 
 .sidebar-nav-item:hover {
